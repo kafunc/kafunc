@@ -32,7 +32,7 @@
 
 (defn precord->kafka
   "Convert a Clojure record (PRecord) to a Kafka ProducerRecord"
-  [^PRecord record]
+  [record]
   (ProducerRecord.
     (:topic record)
     (:partition record)
@@ -51,4 +51,6 @@
 
   Returns the future that the producer generates."
   [^Producer producer record]
-  (.send producer record))
+  (if (map? record)
+    (recur producer (precord->kafka record))
+    (.send producer record)))
