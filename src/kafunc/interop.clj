@@ -1,7 +1,7 @@
 (ns kafunc.interop
   "Namespace for interop with Java/Kafka, to keep core as pure clojure"
   (:import (org.apache.kafka.clients.consumer
-             KafkaConsumer ConsumerRecord)
+             KafkaConsumer ConsumerRecord Consumer)
            (org.apache.kafka.clients.producer
              KafkaProducer ProducerRecord)))
 
@@ -29,3 +29,9 @@
     (.partition record)
     (.topic record)
     (.timestamp record)))
+
+(defn poll
+  "Poll a Kafka consumer"
+  [^Consumer consumer timeout]
+  (when-let [polled (.poll consumer timeout)]
+    (map kafka->crecord )))
