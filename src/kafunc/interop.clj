@@ -1,17 +1,25 @@
 (ns kafunc.interop
   "Namespace for interop with Java/Kafka, to keep core as pure clojure"
+  (:require [kafunc.util :as util])
   (:import (org.apache.kafka.clients.consumer
              KafkaConsumer ConsumerRecord Consumer)
            (org.apache.kafka.clients.producer
              KafkaProducer ProducerRecord Producer)
            (org.apache.kafka.common.serialization
-             ByteArraySerializer ByteArrayDeserializer)))
+             ByteArraySerializer ByteArrayDeserializer)
+           (java.util Properties)))
 
 (def serializer (.getName ByteArraySerializer))
 (def deserializer (.getName ByteArrayDeserializer))
 
 (defrecord CRecord [key value partition topic timestamp offset checksum])
 (defrecord PRecord [key value partition topic timestamp])
+
+(defn- property-map->properties
+  ^Properties [m]
+  (let [prop (Properties.)
+        m    (util/map->properties m)]
+    (dorun (map #(.put prop %1 %2) m))))
 
 (defn kafka->crecord
   "Convert a Kafka ConsumerRecord to a Clojure record"
