@@ -3,7 +3,12 @@
   (:import (org.apache.kafka.clients.consumer
              KafkaConsumer ConsumerRecord Consumer)
            (org.apache.kafka.clients.producer
-             KafkaProducer ProducerRecord Producer)))
+             KafkaProducer ProducerRecord Producer)
+           (org.apache.kafka.common.serialization
+             ByteArraySerializer ByteArrayDeserializer)))
+
+(def serializer (.getName ByteArraySerializer))
+(def deserializer (.getName ByteArrayDeserializer))
 
 (defrecord CRecord [key value partition topic timestamp offset checksum])
 (defrecord PRecord [key value partition topic timestamp])
