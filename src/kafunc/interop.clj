@@ -51,10 +51,4 @@
 
   Returns the future that the producer generates."
   [^Producer producer record]
-  (condp instance? record
-    ProducerRecord (.send producer record)
-    PRecord (recur (precord->kafka record))
-    :else (if (map? record)
-            (recur (map->PRecord record))
-            (throw (IllegalArgumentException.
-                     "Must send a ProducerRecord, PRecord, or map")))))
+  (.send producer record))
