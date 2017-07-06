@@ -30,6 +30,16 @@
     (.topic record)
     (.timestamp record)))
 
+(defn precord->kafka
+  "Convert a Clojure record (PRecord) to a Kafka ProducerRecord"
+  [^PRecord record]
+  (ProducerRecord.
+    (:topic record)
+    (:partition record)
+    (:timestamp record)
+    (:key record)
+    (:value record)))
+
 (defn poll
   "Poll a Kafka consumer"
   [^Consumer consumer timeout]
