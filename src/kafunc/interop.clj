@@ -3,7 +3,7 @@
   (:import (org.apache.kafka.clients.consumer
              KafkaConsumer ConsumerRecord Consumer)
            (org.apache.kafka.clients.producer
-             KafkaProducer ProducerRecord)))
+             KafkaProducer ProducerRecord Producer)))
 
 (defrecord CRecord [key value partition topic timestamp offset checksum])
 (defrecord PRecord [key value partition topic timestamp])
@@ -45,3 +45,16 @@
   [^Consumer consumer timeout]
   (when-let [polled (.poll consumer timeout)]
     (map kafka->crecord )))
+
+(defn send
+  "Send a Kafka ProducerRecord or Clojure PRecord through a Kafka producer
+
+  Returns the future that the producer generates."
+  [^Producer producer record]
+  (condp instance? record
+    ProducerRecord (.send producer record)
+    PRecord (recur (precord->kafka record))
+    :else (if (map? record)
+            (recur (map->PRecord record))
+            (throw (IllegalArgumentException.
+                     "Must send a ProducerRecord, PRecord, or map")))))
