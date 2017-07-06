@@ -17,9 +17,8 @@
 
 (defn- property-map->properties
   ^Properties [m]
-  (let [prop (Properties.)
-        m    (util/map->properties m)]
-    (dorun (map #(.put prop %1 %2) m))))
+  (doto (Properties.)
+    (.putAll (util/map->properties m))))
 
 (defn kafka->crecord
   "Convert a Kafka ConsumerRecord to a Clojure record"

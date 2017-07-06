@@ -25,5 +25,5 @@
 (defn map->properties
   [m]
   (-> m
-      (update-keys #(if (keyword? %) keyword->property %))
-      (update-vals #(if (keyword? %) keyword->property %))))
+      (update-keys #(if (keyword? %) (keyword->property %) %))
+      (update-vals #(if (keyword? %) (keyword->property %) %))))
