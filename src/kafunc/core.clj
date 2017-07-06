@@ -16,9 +16,13 @@
    :value-deserializer interop/deserializer})
 
 (defn make-consumer
-  "Create a KafkaConsumer with the given group."
-  [group]
-  (interop/make-consumer
-    (merge {:bootstrap-servers *kafka-connect*
-            :group-id          group}
-           *consumer-config*)))
+  "Create a KafkaConsumer with the given group.
+
+  If config is supplied, those values will override *consumer-config*, and
+  *consumer-config* overrides the default values created in this function."
+  ([group & [config]]
+   (interop/make-consumer
+     (merge {:bootstrap-servers *kafka-connect*
+             :group-id          group}
+            *consumer-config*
+            config))))
