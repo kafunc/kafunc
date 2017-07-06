@@ -59,6 +59,10 @@
   (when-let [polled (.poll consumer timeout)]
     (map kafka->crecord polled)))
 
+(defn make-consumer
+  [config]
+  (KafkaConsumer. (property-map->properties config)))
+
 (defn send
   "Send a Kafka ProducerRecord or Clojure PRecord through a Kafka producer
 
