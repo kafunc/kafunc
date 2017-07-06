@@ -11,13 +11,12 @@
 (def ^:dynamic *consumer-config*
   "The default values to use for consumer configuration."
   ;; By default, use a byte-array deserializer
-  {:key-deserializer        interop/deserializer
-   :value-deserializer      interop/deserializer})
+  {:key-deserializer   interop/deserializer
+   :value-deserializer interop/deserializer})
 
 (defn make-consumer
   [group]
   (interop/make-consumer
-    (merge
-      {:bootstrap-servers *kafka-connect*
-       :group-id group}
-      *consumer-config*)))
+    (merge {:bootstrap-servers *kafka-connect*
+            :group-id          group}
+           *consumer-config*)))
