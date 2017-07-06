@@ -44,7 +44,7 @@
   "Poll a Kafka consumer"
   [^Consumer consumer timeout]
   (when-let [polled (.poll consumer timeout)]
-    (map kafka->crecord )))
+    (map kafka->crecord polled)))
 
 (defn send
   "Send a Kafka ProducerRecord or Clojure PRecord through a Kafka producer
