@@ -9,12 +9,14 @@
   "localhost:9092")
 
 (def ^:dynamic *consumer-config*
-  "The default values to use for consumer configuration."
-  ;; By default, use a byte-array deserializer
+  "The default values to use for consumer configuration. Keys and values have
+  the same meaning as those defined by Kafka for consumer configuration."
+  ;; By default, use a byte-array deserializer, otherwise use Kafka defaults
   {:key-deserializer   interop/deserializer
    :value-deserializer interop/deserializer})
 
 (defn make-consumer
+  "Create a KafkaConsumer with the given group."
   [group]
   (interop/make-consumer
     (merge {:bootstrap-servers *kafka-connect*
