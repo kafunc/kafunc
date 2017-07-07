@@ -76,3 +76,14 @@
   Useful if topic/partition/key/offset aren't important."
   [consumer & [deserializer]]
   (map :value (consumer->record-seq consumer deserializer)))
+
+(defn topics->record-seq
+  "Create a consumer, subscribe it to the topics, and return a seq of values
+  consumed from those topics.
+
+  If a group is not supplied, a unique identifier will be used instead."
+  [topics & [group config deserializer]]
+  (let [group (or group (interop/unique-string))]
+    (-> (make-consumer group config)
+        (subscribe topics)
+        (consumer->record-seq deserializer))))
