@@ -61,6 +61,13 @@
   (when-let [polled (.poll consumer timeout)]
     (map kafka->crecord polled)))
 
+(defn subscribe
+  [consumer topics]
+  "Subscribe a Kafka consumer to topics"
+  (.subscribe consumer topics)
+  ;; Return modified consumer
+  consumer)
+
 (defn make-consumer
   [config]
   (KafkaConsumer. (property-map->properties config)))
