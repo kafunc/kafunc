@@ -34,6 +34,12 @@
             *consumer-config*
             config))))
 
+(defn subscribe
+  "Subscribe a KafkaConsumer to the given topics."
+  [consumer topics]
+  (let [topics (if (coll? topics) topics [topics])]
+    (interop/subscribe consumer topics)))
+
 (defn next-records
   "Retrieves a collection of the next available records.
 
