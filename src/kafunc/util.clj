@@ -27,3 +27,8 @@
   (-> m
       (update-keys #(if (keyword? %) (keyword->property %) %))
       (update-vals #(if (keyword? %) (keyword->property %) %))))
+
+(defmacro ignore-exceptions
+  "Evaluate the body of the macro, ignoring any exceptions which occur."
+  [& body]
+  `(try ~@body (catch Exception ex#)))
