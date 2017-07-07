@@ -99,4 +99,4 @@
 
 (defn unique-string
   []
-  (UUID/randomUUID))
+  (str (UUID/randomUUID)))

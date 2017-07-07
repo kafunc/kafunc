@@ -65,9 +65,9 @@
   [consumer & [deserializer]]
   (let [deserialize (or deserializer *deserializer*)]
     (lazy-cat
-      (-> (next-records consumer)
-          (update :key (fnil deserialize nil))
-          (update :value (fnil deserialize nil)))
+      (->> (next-records consumer)
+           (map #(update % :key (fnil deserialize nil)))
+           (map #(update % :value (fnil deserialize nil))))
       (consumer->record-seq consumer deserializer))))
 
 (defn consumer->value-seq
