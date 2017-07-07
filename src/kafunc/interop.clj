@@ -7,7 +7,7 @@
              KafkaProducer ProducerRecord Producer)
            (org.apache.kafka.common.serialization
              ByteArraySerializer ByteArrayDeserializer)
-           (java.util Properties)
+           (java.util Properties UUID)
            (java.io
              ByteArrayInputStream ObjectInputStream
              ByteArrayOutputStream ObjectOutputStream)))
@@ -89,3 +89,7 @@
     (.writeObject object-stream object)
     (.flush object-stream)
     (.toByteArray byte-stream)))
+
+(defn unique-string
+  []
+  (UUID/randomUUID))
