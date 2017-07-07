@@ -7,7 +7,10 @@
              KafkaProducer ProducerRecord Producer)
            (org.apache.kafka.common.serialization
              ByteArraySerializer ByteArrayDeserializer)
-           (java.util Properties)))
+           (java.util Properties)
+           (java.io
+             ByteArrayInputStream ObjectInputStream
+             ByteArrayOutputStream ObjectOutputStream)))
 
 (def serializer (.getName ByteArraySerializer))
 (def deserializer (.getName ByteArrayDeserializer))
@@ -70,3 +73,19 @@
   (if (map? record)
     (recur producer (precord->kafka record))
     (.send producer record)))
+
+(defn io-deserialize
+  "A basic deserializer which uses java.io's deserialization."
+  [bytes]
+  (with-open [byte-stream   (ByteArrayInputStream. bytes)
+              object-stream (ObjectInputStream. byte-stream)]
+    (.readObject object-stream)))
+
+(defn io-serialize
+  "A basic serializer which uses java.io's serialization."
+  [object]
+  (with-open [byte-stream (ByteArrayOutputStream.)
+              object-stream (ObjectOutputStream. byte-stream)]
+    (.writeObject object-stream object)
+    (.flush object-stream)
+    (.toByteArray byte-stream)))
