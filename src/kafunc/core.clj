@@ -2,6 +2,9 @@
   (:require [kafunc.interop :as interop]
             [kafunc.util :as util]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Constants and bindings
+
 (def ^:dynamic *kafka-connect*
   "Connection string to bootstrap servers. Each entry is of the form
   address:port, and multiple entries are separated by commas."
@@ -18,9 +21,12 @@
 (def ^:dynamic *deserializer*
   "A function which takes an argument of an object, and returns a byte array.
   The byte array returned must return a similar object when passed to
-  *serializer*. The default function introduces no dependencies, but another
-  makes no guarantees of efficiency."
+  *serializer*. The default function introduces no dependencies, but also makes
+  no guarantees of efficiency."
   interop/io-deserialize)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Functions
 
 (defn make-consumer
   "Create a KafkaConsumer with the given group and/or configuration.
@@ -35,15 +41,20 @@
             config))))
 
 (defn subscribe
-  "Subscribe a KafkaConsumer to the given topics."
+  "Subscribe a KafkaConsumer to the given topics.
+
+  Any previous subscriptions will be lost!"
   [consumer topics]
   (let [topics (if (coll? topics) topics [topics])]
     (interop/subscribe consumer topics)))
 
 (defn next-records
-  "Retrieves a collection of the next available records.
+  "Retrieves a collection of the next available records. Blocking.
 
-  See consumer->record-seq for details of what a record contains."
+  See consumer->record-seq for details of what a record contains. Optionally
+  accepts a timeout value, which will cap the amount of milliseconds that this
+  function will block. By default, it should block for Long/MAX_VALUE
+  milliseconds."
   [consumer & [timeout]]
   (let [timeout (or timeout Long/MAX_VALUE)]
     (interop/poll consumer timeout)))
