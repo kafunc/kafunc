@@ -1,5 +1,6 @@
 (ns kafunc.interop
   "Namespace for interop with Java/Kafka, to keep core as pure clojure"
+  (:refer-clojure :exclude [send])
   (:require [kafunc.util :as util])
   (:import (org.apache.kafka.clients.consumer
              KafkaConsumer ConsumerRecord Consumer)
@@ -97,6 +98,6 @@
     (.flush object-stream)
     (.toByteArray byte-stream)))
 
-(defn unique-string
-  []
-  (str (UUID/randomUUID)))
+
+
+(defn unique-string [] (str (UUID/randomUUID)))
