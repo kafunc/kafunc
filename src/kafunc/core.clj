@@ -25,6 +25,13 @@
   no guarantees of efficiency."
   interop/io-deserialize)
 
+(def ^:dynamic *serializer*
+  "A function which takes an argument of a byte array, and returns an object.
+  The object returned must return a similar byte array when passed to
+  *deserializer*. The default function introduces no dependencies, but also
+  makesf no guarantees of efficiency."
+  interop/io-serialize)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Functions
 
