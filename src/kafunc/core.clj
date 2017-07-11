@@ -70,12 +70,18 @@
            (map #(update % :value (fnil deserialize nil))))
       (consumer->record-seq consumer deserializer))))
 
+(defn record-seq->value-seq
+  "Creates a lazy seq of values contained within the records in record-seq."
+  [record-seq]
+  (map :value record-seq))
+
 (defn consumer->value-seq
   "Creates an infinite lazy seq which contains values consumed by a consumer.
 
   Useful if topic/partition/key/offset aren't important."
   [consumer & [deserializer]]
-  (map :value (consumer->record-seq consumer deserializer)))
+  (-> (consumer->record-seq consumer deserializer)
+      (record-seq->value-seq)))
 
 (defn topics->record-seq
   "Create a consumer, subscribe it to the topics, and return a seq of values
