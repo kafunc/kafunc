@@ -42,6 +42,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Functions
 
+(defn- update-record-kv
+  [record f]
+  (-> record
+      (update :key f)
+      (update :value f)))
+
+;;; Consumers
+
 (defn make-consumer
   "Create a KafkaConsumer with the given group and/or configuration.
 
@@ -88,11 +96,11 @@
   value is bound during the creation of the seq, so the binding does not need
   to be maintained for the lifetime of the seq."
   [consumer & [deserializer]]
-  (let [deserialize (or deserializer *deserializer*)]
+  (let [deserialize (or deserializer *deserializer*)
+        extract     (fnil deserialize nil)]
     (lazy-cat
       (->> (next-records consumer)
-           (map #(update % :key (fnil deserialize nil)))
-           (map #(update % :value (fnil deserialize nil))))
+           (update-record-kv extract))
       (consumer->record-seq consumer deserializer))))
 
 (defn record-seq->value-seq
