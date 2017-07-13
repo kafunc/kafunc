@@ -28,6 +28,8 @@
       (update-keys #(if (keyword? %) (keyword->property %) %))
       (update-vals #(if (keyword? %) (keyword->property %) %))))
 
+(defn flipped [f] (comp (partial apply f) reverse list))
+
 (defmacro ignore-exceptions
   "Evaluate the body of the macro, ignoring any exceptions which occur."
   [& body]
