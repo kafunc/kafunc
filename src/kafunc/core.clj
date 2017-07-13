@@ -70,6 +70,12 @@
   (let [topics (if (coll? topics) topics [topics])]
     (interop/subscribe consumer topics)))
 
+(defn subscriptions
+  "Retrieve a set of the current subscriptions, or nil if there are no
+  subscriptions for the consumer."
+  [consumer]
+  (interop/consumer-subscriptions consumer))
+
 (defn next-records
   "Retrieves a collection of the next available records. Blocking.
 

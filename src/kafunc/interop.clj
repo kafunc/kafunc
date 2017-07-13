@@ -77,6 +77,11 @@
   [config]
   (KafkaProducer. (property-map->properties config)))
 
+(defn consumer-subscriptions
+  [^Consumer consumer]
+  (let [subs (.subscription consumer)]
+    (when (not (empty? subs)) subs)))
+
 (defn send
   "Send a Kafka ProducerRecord or Clojure PRecord through a Kafka producer
 
