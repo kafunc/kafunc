@@ -159,3 +159,27 @@
     (merge {:bootstrap-servers *kafka-connect*}
            *producer-config*
            config)))
+
+(defn send-records
+  "Send a seq of producer-records to their destinations topic and partition.
+
+  Returns a seq of the records updated with the following values, which are
+  populated from the Kafka metadata:
+    * :topic
+    * :partition
+    * :offset
+    * :timestamp
+    * :checksum
+
+  The sending is eager, but the retreiving of metadata from the results is lazy.
+  This allows asynchronous sends to simply ignore this metadata."
+  [record-seq & [producer serializer]]
+  (let [producer  (or producer (make-producer))
+        serialize (fnil (or serializer *serializer*) nil)
+        inject    (partial (util/flipped update-record-kv) serialize)]
+    (map merge
+         record-seq
+         (doall (map (comp interop/record-meta->map
+                           deref
+                           (partial interop/send producer) inject)
+                     record-seq)))))

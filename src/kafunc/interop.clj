@@ -56,6 +56,14 @@
     (:key record)
     (:value record)))
 
+(defn record-meta->map
+  [record-meta]
+  {:topic     (.topic record-meta)
+   :partition (.partition record-meta)
+   :timestamp (.timestamp record-meta)
+   :offset    (.offset record-meta)
+   :checksum  (.checksum record-meta)})
+
 (defn poll
   "Poll a Kafka consumer"
   [^Consumer consumer timeout]
