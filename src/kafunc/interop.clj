@@ -73,6 +73,10 @@
   [config]
   (KafkaConsumer. (property-map->properties config)))
 
+(defn make-producer
+  [config]
+  (KafkaProducer. (property-map->properties config)))
+
 (defn send
   "Send a Kafka ProducerRecord or Clojure PRecord through a Kafka producer
 
@@ -97,7 +101,5 @@
     (.writeObject object-stream object)
     (.flush object-stream)
     (.toByteArray byte-stream)))
-
-
 
 (defn unique-string [] (str (UUID/randomUUID)))

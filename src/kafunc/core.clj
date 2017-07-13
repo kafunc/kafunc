@@ -18,6 +18,13 @@
   {:key-deserializer   interop/deserializer
    :value-deserializer interop/deserializer})
 
+(def ^:dynamic *producer-config*
+  "The default values to use for producer configuration. Keys and values have
+  the same meaning as those defined by Kafka for producer configuration."
+  ;; By default, use a byte-array serializer, otherwise use Kafka defaults
+  {:key-serializer   interop/serializer
+   :value-serializer interop/serializer})
+
 (def ^:dynamic *deserializer*
   "A function which takes an argument of an object, and returns a byte array.
   The byte array returned must return a similar object when passed to
@@ -111,3 +118,30 @@
     (-> (make-consumer group config)
         (subscribe topics)
         (consumer->record-seq deserializer))))
+
+;;; Producers
+
+(defn ->producer-record
+  "Create a producer-record with the specified entries.
+
+  Entries:
+    * topic     - Destination topic.
+    * value     - Value contained in record.
+    * key       - (optional) Key.
+    * partition - (optional) Destination partition of topic.
+    * timestamp - (optional) Timestamp of record.
+
+  The returned value will be a Clojure record with these values."
+  [topic value & [key partition timestamp]]
+  (interop/->PRecord key value partition topic timestamp))
+
+(defn make-producer
+  "Create a KafkaProducer, optionally with the given configuration.
+
+  If config is supplied, those values will override *producer-config*, and
+  *producer-config* overrides the default values created in this function."
+  [& [config]]
+  (interop/make-producer
+    (merge {:bootstrap-servers *kafka-connect*}
+           *producer-config*
+           config)))
