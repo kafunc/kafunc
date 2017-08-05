@@ -179,7 +179,6 @@
         inject    (partial (util/flipped update-record-kv) serialize)]
     (map merge
          record-seq
-         (doall (map (comp interop/record-meta->map
-                           deref
-                           (partial interop/send producer) inject)
-                     record-seq)))))
+         (map (comp interop/record-meta->map deref)
+              (doall (map (comp (partial interop/send producer) inject)
+                          record-seq))))))
