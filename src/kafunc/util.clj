@@ -1,4 +1,5 @@
 (ns kafunc.util
+  "Utility functions"
   (:require [clojure.string :as str]))
 
 (defn keyword->property
