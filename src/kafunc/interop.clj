@@ -13,8 +13,8 @@
              ByteArrayInputStream ObjectInputStream
              ByteArrayOutputStream ObjectOutputStream)))
 
-(def serializer (.getName ByteArraySerializer))
-(def deserializer (.getName ByteArrayDeserializer))
+(def byte-serializer (.getName ByteArraySerializer))
+(def byte-deserializer (.getName ByteArrayDeserializer))
 
 (defrecord CRecord [key value partition topic timestamp offset checksum])
 (defrecord PRecord [key value partition topic timestamp])

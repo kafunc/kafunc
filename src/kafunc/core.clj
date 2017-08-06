@@ -15,15 +15,15 @@
   "The default values to use for consumer configuration. Keys and values have
   the same meaning as those defined by Kafka for consumer configuration."
   ;; By default, use a byte-array deserializer, otherwise use Kafka defaults
-  {:key-deserializer   interop/deserializer
-   :value-deserializer interop/deserializer})
+  {:key-deserializer   interop/byte-deserializer
+   :value-deserializer interop/byte-deserializer})
 
 (def ^:dynamic *producer-config*
   "The default values to use for producer configuration. Keys and values have
   the same meaning as those defined by Kafka for producer configuration."
   ;; By default, use a byte-array serializer, otherwise use Kafka defaults
-  {:key-serializer   interop/serializer
-   :value-serializer interop/serializer})
+  {:key-serializer   interop/byte-serializer
+   :value-serializer interop/byte-serializer})
 
 (def ^:dynamic *deserializer*
   "A function which takes an argument of an object, and returns a byte array.
