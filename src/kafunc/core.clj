@@ -164,7 +164,7 @@
            config)))
 
 (defn serialize-records
-
+  "Serialize keys and values for all records in a collection."
   [xs & [serializer]]
   (let [serialize (fnil (or serializer *serializer* identity) nil)]
     (map (partial update-record-kv serialize) xs)))
