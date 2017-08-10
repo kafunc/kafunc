@@ -1,6 +1,6 @@
 (ns kafunc.core
-  (:require [kafunc.interop :as interop]
-            [kafunc.util :as util]))
+  (:require [kafunc.impl.interop :as interop]
+            [kafunc.impl.util :as util]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Constants and bindings
@@ -15,15 +15,15 @@
   "The default values to use for consumer configuration. Keys and values have
   the same meaning as those defined by Kafka for consumer configuration."
   ;; By default, use a byte-array deserializer, otherwise use Kafka defaults
-  {:key-deserializer   interop/deserializer
-   :value-deserializer interop/deserializer})
+  {:key-deserializer   interop/byte-deserializer
+   :value-deserializer interop/byte-deserializer})
 
 (def ^:dynamic *producer-config*
   "The default values to use for producer configuration. Keys and values have
   the same meaning as those defined by Kafka for producer configuration."
   ;; By default, use a byte-array serializer, otherwise use Kafka defaults
-  {:key-serializer   interop/serializer
-   :value-serializer interop/serializer})
+  {:key-serializer   interop/byte-serializer
+   :value-serializer interop/byte-serializer})
 
 (def ^:dynamic *deserializer*
   "A function which takes an argument of an object, and returns a byte array.
@@ -164,7 +164,7 @@
            config)))
 
 (defn serialize-records
-
+  "Serialize keys and values for all records in a collection."
   [xs & [serializer]]
   (let [serialize (fnil (or serializer *serializer* identity) nil)]
     (map (partial update-record-kv serialize) xs)))
@@ -183,7 +183,7 @@
   The sending is eager, but the retreiving of metadata from the results is lazy.
   This allows asynchronous sends to simply ignore this metadata."
   [record-seq & [producer serializer]]
-  (let [producer  (or producer (make-producer))]
+  (let [producer (or producer (make-producer))]
     (map merge
          record-seq
          (map (comp interop/record-meta->map deref)

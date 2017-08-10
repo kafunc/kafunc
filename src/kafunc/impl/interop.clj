@@ -1,7 +1,7 @@
-(ns kafunc.interop
+(ns kafunc.impl.interop
   "Namespace for interop with Java/Kafka, to keep core as pure clojure"
   (:refer-clojure :exclude [send])
-  (:require [kafunc.util :as util])
+  (:require [kafunc.impl.util :as util])
   (:import (org.apache.kafka.clients.consumer
              KafkaConsumer ConsumerRecord Consumer)
            (org.apache.kafka.clients.producer
@@ -13,8 +13,8 @@
              ByteArrayInputStream ObjectInputStream
              ByteArrayOutputStream ObjectOutputStream)))
 
-(def serializer (.getName ByteArraySerializer))
-(def deserializer (.getName ByteArrayDeserializer))
+(def byte-serializer (.getName ByteArraySerializer))
+(def byte-deserializer (.getName ByteArrayDeserializer))
 
 (defrecord CRecord [key value partition topic timestamp offset checksum])
 (defrecord PRecord [key value partition topic timestamp])

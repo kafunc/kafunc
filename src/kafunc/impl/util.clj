@@ -1,4 +1,4 @@
-(ns kafunc.util
+(ns kafunc.impl.util
   "Utility functions"
   (:require [clojure.string :as str]))
 
