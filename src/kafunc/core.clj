@@ -1,6 +1,6 @@
 (ns kafunc.core
-  (:require [kafunc.interop :as interop]
-            [kafunc.util :as util]))
+  (:require [kafunc.impl.interop :as interop]
+            [kafunc.impl.util :as util]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Constants and bindings
