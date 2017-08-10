@@ -183,7 +183,7 @@
   The sending is eager, but the retreiving of metadata from the results is lazy.
   This allows asynchronous sends to simply ignore this metadata."
   [record-seq & [producer serializer]]
-  (let [producer  (or producer (make-producer))]
+  (let [producer (or producer (make-producer))]
     (map merge
          record-seq
          (map (comp interop/record-meta->map deref)
